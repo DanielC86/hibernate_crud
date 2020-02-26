@@ -81,11 +81,48 @@ public class HibernateTutorialApplication {
 			//display users which name starts from D or M
 			displayUsers(theUsers);
 
+
+
 			//commit the transaction
 			session.getTransaction().commit();
 
 
 			System.out.println("all done");
+
+			//updating db
+
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+
+
+			int id = 6;
+			Users updatingUser = session.get(Users.class, id);
+			updatingUser.setName("Daniel");
+
+
+			session.getTransaction().commit();
+
+
+			//deleting row from db
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+
+			//two way to do so:
+			//first way by writing query
+			session.createQuery("delete from Users where id = 4")
+				.executeUpdate();
+
+			session.createQuery("delete from Users where name = 'James'")
+					.executeUpdate();
+
+			//second way is to use session.delete operator
+			Users deletingUser = session.get(Users.class, id);
+			session.delete(deletingUser);
+
+			//commit the transaction
+			session.getTransaction().commit();
+
+
 
 		}
 		finally {
